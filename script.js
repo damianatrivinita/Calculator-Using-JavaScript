@@ -1,120 +1,112 @@
-"use strict";
+let prevNumber = ''
+let calculationOperator = ''
+let currentNumber = '0'
 
-var input = document.getElementById('input'), // input/output button
-  number = document.querySelectorAll('.numbers div'), // number buttons
-  operator = document.querySelectorAll('.operators div'), // operator buttons
-  result = document.getElementById('result'), // equal button
-  clear = document.getElementById('clear'), // clear button
-  resultDisplayed = false; // flag to keep an eye on what output is displayed
+const inputNumber = (number) => {
+	if (currentNumber === '0') {
+		currentNumber = number
+	} else {
+		currentNumber += number //string concentation because 'currNumber' stored as a string
+	}
+}
+//--01----------CALC SCREEN & UPDATE-------------------
+const calculatorScreen = document.querySelector ('.calculator-screen')
+const updateScreen = (number) => {
+	calculatorScreen.value = number
+}
+//--02----------NUMBER EVENTS-------------------
+const numbers = document.querySelectorAll(".number")
+numbers.forEach((number) => {
+	console.log('disini')
+	number.addEventListener("click", (event) => {
+		inputNumber(event.target.value)
+		updateScreen(currentNumber)
+	})
+})
 
-// adding click handlers to number buttons
-for (var i = 0; i < number.length; i++) {
-  number[i].addEventListener("click", function(e) {
+//--03----------OPERATORS EVENTS-------------------
+const operators = document.querySelectorAll(".operator")
+operators.forEach((operator) => {
+	operator.addEventListener("click", (event) => {
+		inputOperator(event.target.value)
+	})
+})
 
-    // storing current input string and its last character in variables - used later
-    var currentString = input.innerHTML;
-    var lastChar = currentString[currentString.length - 1];
-
-    // if result is not diplayed, just keep adding
-    if (resultDisplayed === false) {
-      input.innerHTML += e.target.innerHTML;
-    } else if (resultDisplayed === true && lastChar === "+" || lastChar === "-" || lastChar === "×" || lastChar === "÷") {
-      // if result is currently displayed and user pressed an operator
-      // we need to keep on adding to the string for next operation
-      resultDisplayed = false;
-      input.innerHTML += e.target.innerHTML;
-    } else {
-      // if result is currently displayed and user pressed a number
-      // we need clear the input string and add the new input to start the new opration
-      resultDisplayed = false;
-      input.innerHTML = "";
-      input.innerHTML += e.target.innerHTML;
-    }
-
-  });
+const inputOperator = (operator) => {
+	if (calculationOperator === '') {
+		prevNumber = currentNumber		
+	}
+	calculationOperator = operator
+	currentNumber = '0'
 }
 
-// adding click handlers to number buttons
-for (var i = 0; i < operator.length; i++) {
-  operator[i].addEventListener("click", function(e) {
+//--04----------CALCULATION-------------------
+const equalSign = document.querySelector('.equal-sign')
+equalSign.addEventListener('click', () => {
+	calculate()
+	updateScreen(currentNumber)
+})
 
-    // storing current input string and its last character in variables - used later
-    var currentString = input.innerHTML;
-    var lastChar = currentString[currentString.length - 1];
-
-    // if last character entered is an operator, replace it with the currently pressed one
-    if (lastChar === "+" || lastChar === "-" || lastChar === "×" || lastChar === "÷") {
-      var newString = currentString.substring(0, currentString.length - 1) + e.target.innerHTML;
-      input.innerHTML = newString;
-    } else if (currentString.length == 0) {
-      // if first key pressed is an opearator, don't do anything
-      console.log("enter a number first");
-    } else {
-      // else just add the operator pressed to the input
-      input.innerHTML += e.target.innerHTML;
-    }
-
-  });
+const calculate = () => {
+	let result = ''
+	switch(calculationOperator) {
+		case "+" :
+			result = parseFloat(prevNumber) + parseFloat(currentNumber)
+			break
+		case "-" :
+			result = parseFloat(prevNumber) - parseFloat(currentNumber)
+			break
+		case "*" :
+			result = parseFloat(prevNumber) * parseFloat(currentNumber)
+			break
+		case "/" :
+			result = parseFloat(prevNumber) / parseFloat(currentNumber)
+			break
+		default:
+			return		
+	}
+	currentNumber = result
+	calculationOperator = ''
 }
 
-// on click of 'equal' button
-result.addEventListener("click", function() {
+const clearAll = () => {
+	prevNumber = ''
+	calculationOperator = ''
+	currentNumber = '0'
+}
 
-  // this is the string that we will be processing eg. -10+26+33-56*34/23
-  var inputString = input.innerHTML;
+//--05----------AC BUTTON-------------------
 
-  // forming an array of numbers. eg for above string it will be: numbers = ["10", "26", "33", "56", "34", "23"]
-  var numbers = inputString.split(/\+|\-|\×|\÷/g);
+const clearBtn = document.querySelector('.all-clear')
+clearBtn.addEventListener('click', () => {
+	clearAll()
+	updateScreen(currentNumber)
+})
 
-  // forming an array of operators. for above string it will be: operators = ["+", "+", "-", "*", "/"]
-  // first we replace all the numbers and dot with empty string and then split
-  var operators = inputString.replace(/[0-9]|\./g, "").split("");
+//--06----------DECIMALS-------------------
+inputDecimal = (dot) => {
+	if(currentNumber.includes('.')) {
+		return
+	}
+	currentNumber += dot
+}
 
-  console.log(inputString);
-  console.log(operators);
-  console.log(numbers);
-  console.log("----------------------------");
+const decimal = document.querySelector('.decimal')
+decimal.addEventListener('click', (event) => {
+	inputDecimal(event.target.value)
+	updateScreen(currentNumber)
+})
 
-  // now we are looping through the array and doing one operation at a time.
-  // first divide, then multiply, then subtraction and then addition
-  // as we move we are alterning the original numbers and operators array
-  // the final element remaining in the array will be the output
+//--07----------PERCENTAGE-------------------
+inputPercentage = (percentage) => {
+	if(currentNumber.includes('%')) {
+		return
+     }
+     currentNumber = currentNumber / 100
+}
 
-  var divide = operators.indexOf("÷");
-  while (divide != -1) {
-    numbers.splice(divide, 2, numbers[divide] / numbers[divide + 1]);
-    operators.splice(divide, 1);
-    divide = operators.indexOf("÷");
-  }
-
-  var multiply = operators.indexOf("×");
-  while (multiply != -1) {
-    numbers.splice(multiply, 2, numbers[multiply] * numbers[multiply + 1]);
-    operators.splice(multiply, 1);
-    multiply = operators.indexOf("×");
-  }
-
-  var subtract = operators.indexOf("-");
-  while (subtract != -1) {
-    numbers.splice(subtract, 2, numbers[subtract] - numbers[subtract + 1]);
-    operators.splice(subtract, 1);
-    subtract = operators.indexOf("-");
-  }
-
-  var add = operators.indexOf("+");
-  while (add != -1) {
-    // using parseFloat is necessary, otherwise it will result in string concatenation :)
-    numbers.splice(add, 2, parseFloat(numbers[add]) + parseFloat(numbers[add + 1]));
-    operators.splice(add, 1);
-    add = operators.indexOf("+");
-  }
-
-  input.innerHTML = numbers[0]; // displaying the output
-
-  resultDisplayed = true; // turning flag if result is displayed
-});
-
-// clearing the input on press of clear
-clear.addEventListener("click", function() {
-  input.innerHTML = "";
+const percentage = document.querySelector('.percentage')
+percentage.addEventListener('click', (event) => {
+  inputPercentage(event.target.value)
+  updateScreen(currentNumber)
 })
