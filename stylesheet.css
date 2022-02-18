@@ -1,0 +1,96 @@
+.calculator {
+	text-align: center;
+	margin: 0 auto;
+	padding-top: 200px;
+	padding: 20px;
+    -webkit-box-shadow: 0px 1px 4px 0px rgb(178,34,34);
+    box-shadow: 0px 1px 4px 0px rgb(160, 82, 45);
+    border-radius: 1px;
+}
+
+.calculator-screen {
+	width: 100%;
+	height: 100px;
+	background-color: #252525;
+	color: #fff;
+	text-align: right;
+	font-size: 36px;
+	border: none;
+	padding: 0 20px;
+	box-sizing: border-box;
+	border: 1px solid rgb(254, 222, 173);
+    border-radius: 1px;
+    height: 80px;
+    padding-right: 15px;
+    padding-top: 10px;
+    text-align: right;
+    margin-right: 6px;
+    font-size: 2.5rem;
+    overflow-x: auto;
+    transition: all .2s ease-in-out;
+}
+.calculator-screen:hover {
+  border: 1px solid rgb(238, 122, 45, 0.877);
+  -webkit-box-shadow: inset 0px 1px 4px 0px rgb(178,34,34);
+  box-shadow: inset 0px 1px 4px 0px rgb(0, 0, 0, 0.2);
+}
+.calculator-keys {
+	width: 100%;
+}
+
+.row {
+	display: flex;
+}
+
+button {
+	height: 80px;
+	background-color: rgb(245, 222, 179);
+	border: 1px solid black;
+	font-size: 32px;
+	color: black;
+	width: 25%;
+	outline: none;
+}
+
+.all-clear, .percentage,.decimal, .zero-btn {
+	width: 37.8%;
+	background-color: rgb(251, 160, 122);
+}
+.all-clear:hover , .percentage:hover ,.decimal:hover , .zero-btn:hover {
+	background-color: rgb(253, 218, 185);
+}
+
+.operator, .equal-sign {
+	background-color:rgb(251, 160, 122);
+
+}
+
+button:hover {
+	background-color: lightgrey;
+}
+
+.operator:hover, .equal-sign:hover {
+	background-color: rgb(253, 218, 185);
+}
+body {
+  width: 500px;
+  margin: 4% auto;
+  font-family: 'Source Sans Pro', sans-serif;
+  letter-spacing: 5px;
+  font-size: 1.8rem;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+.operators {
+  display: inline-block;
+  border: 1px solid rgb(160, 82, 45);
+  border-radius: 1px;
+  width: 80px;
+  text-align: center;
+  padding: 10px;
+  margin: 20px 4px 10px 0;
+  cursor: pointer;
+  background-color: rgb(251, 160, 122);
+  transition: border-color .2s ease-in-out, background-color .2s, box-shadow .2s;
+}
